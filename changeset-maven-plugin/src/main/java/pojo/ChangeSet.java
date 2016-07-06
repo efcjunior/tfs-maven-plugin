@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by c114416 on 05/07/2016.
  */
-public class ChangeSet {
+public class ChangeSet implements Pojo {
 
     private long count;
     private List<Value> value;

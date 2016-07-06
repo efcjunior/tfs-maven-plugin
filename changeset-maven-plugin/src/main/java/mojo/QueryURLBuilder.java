@@ -13,19 +13,24 @@ public class QueryURLBuilder implements Cloneable {
 
     private final String baseUrl;
     private LinkedList<String> parameters;
-    private String url;
+    private String queryUrl;
 
     private QueryURLBuilder(String baseUrl){
         this.baseUrl = baseUrl;
         this.parameters = new LinkedList<String>();
     }
 
-    public LinkedList<String> getParameters() {
-        return parameters;
+    public QueryURLBuilder setParameter(String parameter){
+        this.parameters.add(parameter);
+        return this;
     }
 
-    public String getUrl() {
-        return url;
+    public void setParameters(LinkedList<String> parameters){
+        this.parameters = parameters;
+    }
+
+    public String getQueryUrl() {
+        return queryUrl;
     }
 
     public static QueryURLBuilder custom(String baseUrl){
@@ -33,11 +38,11 @@ public class QueryURLBuilder implements Cloneable {
     }
 
     public QueryURLBuilder build() {
-        this.url = new String(this.baseUrl);
+        this.queryUrl = new String(this.baseUrl);
 
         for (int i = 0; i < parameters.size(); i++) {
             String regex = "{" + i + "}";
-            this.url = this.url.replaceAll(regex, parameters.get(i));
+            this.queryUrl = this.queryUrl.replaceAll(regex, parameters.get(i));
         }
         return null;
     }

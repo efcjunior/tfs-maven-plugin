@@ -15,6 +15,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 import pojo.ChangeSet;
 
 import java.io.BufferedReader;
@@ -37,7 +38,7 @@ public class Main {
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
 
 //        List<String> authPrefs = new ArrayList<String>();
-//        authPrefs.add(AuthSchemes.NTLM);
+        authPrefs.add(AuthSchemes.);
 //        authPrefs.add(AuthSchemes.KERBEROS);
 //
         RequestConfig requestConfig = RequestConfig.custom().setProxyPreferredAuthSchemes(authPrefs).build();
@@ -56,6 +57,7 @@ public class Main {
                     + response.getStatusLine().getStatusCode());
         }
 
+        EntityUtils.toString(response.getEntity());
 
 
         BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));

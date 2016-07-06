@@ -1,5 +1,7 @@
 package mojo;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -10,6 +12,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import pojo.ChangeSet;
 
 import java.net.URL;
 
@@ -20,6 +23,9 @@ import static mojo.QueryURLBuilder.*;
  */
 @Mojo( name = "changesetid")
 public class ChangeSetSearchMojo extends AbstractMojo {
+
+    @Parameter(property = "changesetid.urlBase", defaultValue = "xpto")
+    private String urlBase;
 
     @Parameter
     private URL serverUrl;
@@ -36,11 +42,22 @@ public class ChangeSetSearchMojo extends AbstractMojo {
     @Parameter
     private String domain;
 
+    @Parameter(property = "changesetid.projectVersion", defaultValue = "${project.version}")
+    private String projectVersion;
+
     public void execute() throws MojoExecutionException, MojoFailureException {
-        getLog().info("Construção de URL Restfull");
+        getLog().info("Construcao de URL de Pesquisa Restful");
 
-        URL urlFormatted = QueryURLBuilder.custom(serverUrl,projectPath).build();
+       QueryURLBuilder queryURLBuilder =  QueryURLBuilder.custom(this.urlBase)
+                .setParameter(this.serverUrl.toString())
+                .setParameter(this.projectPath)
+                .build();
 
+        getLog().info("Construcao Credenciais");
+        NTCredentials ntCredentials = new NTCredentials(this.username, this.password, "", this.domain);
+
+        getLog().info("Execucao Requisicao");
+        ChangeSet changeSet = HttpConsumer.custom(queryURLBuilder,ntCredentials).execute(ChangeSet.class);
 
 
 
